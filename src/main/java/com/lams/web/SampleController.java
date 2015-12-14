@@ -13,7 +13,6 @@ public class SampleController {
 
     @RequestMapping("/")
     public String index() {
-        System.out.println("index222");
         return "index";
     }
 }
