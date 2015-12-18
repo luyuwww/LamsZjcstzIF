@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -350,6 +351,9 @@ public class BaseService {
 	protected SGroupMapper sGroupMapper;
 	@Autowired
 	protected SUserMapper sUserMapper;
+
+	@Value("${lams.ip}")
+	protected String lamsIP;
 
 	private String sysdate = null;
 	private List<FDTable> logList = null;//部门f表的字段list

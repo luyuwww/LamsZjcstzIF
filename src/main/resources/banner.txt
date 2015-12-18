@@ -1,0 +1,15 @@
+  j        j.      f       f         ;t    LDf
+  K        W:      WD      WK        KD  ;Kj jW
+  K        W:     :iW      W K      W:D  W
+  K        W:     W i:     W GE    K :D  E
+  K        W:    :K  W     W  Li  Wi :D  W
+  K        W:    W.  K:    W   K.;G  :D  EW:
+  KWWWWWWWWK:   tK    K    W    WW   :D    jWE
+  K        W:   W     Kt   W         :D      GW
+  K        W:   G......W   W         :D       EL
+  K        W:  D       G   W         :D       iK
+  K        W:  W        W  W         :D       Wi
+  K        W: W         E, W         :D  WKtiKf
+  i        i  i          i i         .;    GE.
+
+${spring-boot.version}
