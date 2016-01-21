@@ -1,10 +1,14 @@
 package com.lams;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.lams.pojo.SUser;
 import com.lams.util.DruidProperties;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.jasper.tagplugins.jstl.core.Url;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +24,11 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import stub.ExpectedApproval;
+import stub.ExpectedApprovalSoap;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by DaMo on 2015/12/9.
@@ -60,5 +69,26 @@ public class WarApplication extends SpringBootServletInitializer {
     public PlatformTransactionManager transactionManager(DruidProperties dp) {
         return new DataSourceTransactionManager(druidDataSource(dp));
     }
+
+//    @Bean
+//    public ExpectedApprovalSoap expectedApprovalSoap(){
+//        URL url = null;
+//        try {
+//            url = new URL(oaTodoWsURL);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//        return new ExpectedApproval(url).getExpectedApprovalSoap();
+//    }
+
+    @Bean
+    public SUser sUser(){
+        SUser user = new SUser();
+        user.setUsername("sdfsdf2fcsdcw");
+        return user;
+    }
+
+    @Value("${oa.todo.ws.url}")
+    public String oaTodoWsURL;
 
 }
