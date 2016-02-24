@@ -44,7 +44,17 @@ public interface JdbcDao {
 	 * 查询为String
 	 */
 	public String query4String(String sql) ;
+
+	/**
+	 * 得到数据库连接
+	 * @return
+     */
 	public Connection getConn();
-	
+
+	/**
+	 * 插入Efile
+	 * @param tableName
+	 * @param efileSetter
+     */
 	public void insertEfile(String tableName, PreparedStatementSetter efileSetter);
 }

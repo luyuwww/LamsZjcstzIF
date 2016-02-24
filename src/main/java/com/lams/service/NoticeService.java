@@ -9,6 +9,7 @@ import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lams.dao.mapper.SUserMapper;
+import com.lams.pojo.FlowBean;
 import com.lams.pojo.SUser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
@@ -39,57 +40,17 @@ public class NoticeService extends BaseService {
 		String gotoLamsTaskUrl = "http://"+lamsIP +"/LamsIFSS/gotoTask";
 
 		ObjectMapper mapper = new ObjectMapper();
-		Map<String,Object> vars = null;
+		FlowBean flowBean = null;
 		try {
 			String[] userCodeList = StringUtils.split(userCodes,"[,]");
-			vars = mapper.readValue(varsJson, Map.class);
-			sqrxm = (vars.get("sqrxm") == null ? "" : vars.get("sqrxm").toString());
-			sqrdm = (vars.get("sqrdm") == null ? "" : vars.get("sqrdm").toString());
-			sqrbm = (vars.get("sqrbm") == null ? "" : vars.get("sqrbm").toString());
-			sqyy = (vars.get("sqyy") == null ? "" : vars.get("sqyy").toString());
-			sqtype = (vars.get("sqtype") == null ? "" : vars.get("sqtype").toString());
-			mj = (vars.get("mj") == null ? "" : vars.get("mj").toString());
-			sqrUser = sUserMapper.getUserByUsercode(sqrdm);
-			for (String userCode : userCodeList) {
-				user = sUserMapper.getUserByUsercode(userCode);
-				if(user != null && StringUtils.isNotEmpty(user.getEmail())){
-					String content = todoVM;
-					String todoTitle = sendInfoTitle;
-
-					todoTitle = todoTitle.replace("@sqrUsername", sqrxm);
-					todoTitle = todoTitle.replace("@sqtype", sqtype);
-
-					content = content.replace("@sqrGroupName", sqrbm);
-					content = content.replace("@sqrUsername", sqrxm);
-					content = content.replace("@sqyy", sqyy);
-					content = content.replace("@sqtype", sqtype);
-					content = content.replace("@itemMJ", mj);
-					content = content.replace("@sqrMJ", StringUtils.isNotEmpty(sqrUser.getMj()) ? sqrUser.getMj(): "");
-					content = content.replace("@fqrUsername", user.getUsername());
-					content = content.replace("@gotoLamsUrl", gotoLamsTaskUrl);
-					log.info(content);
-					try {
-						sendInfo(todoTitle , gotoLamsTaskUrl,
-								user.getUsername(), user.getEmail() , "false", content,  actTaskID);
-					} catch (Exception e) {
-						log.error(e.getMessage() , e );
-					}
-				}
-			}
+			flowBean = mapper.readValue(varsJson, FlowBean.class);
+			System.out.println(flowBean.getStartime());
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 	}
 	
 	public void sendDestoryMsg(String operUserCode, String actTaskId) {
-//		SUser user = null;
-//		try {
-//			user = sUserMapper.getUserByUsercode(operUserCode);
-//			System.out.println("keys: " +  actTaskId + "-" +operUserCode);
-//			sendInfo("" , "" ,	user.getUsername(), user.getEmail() , "true", "",  actTaskId);
-//		} catch (Exception e) {
-//			log.error(e.getMessage());
-//		}
 	}
 
 	/**

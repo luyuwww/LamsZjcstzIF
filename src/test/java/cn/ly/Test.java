@@ -18,11 +18,10 @@ import java.util.List;
 @SpringApplicationConfiguration(classes = WarApplication.class)
 public class Test {
     @org.junit.Test
-    public void test001(){
+    public void test001() {
         List<SUser> userList = noticeService.listAllUser();
         for (SUser sUser : userList) {
             System.out.println(sUser.getUsername());
-
         }
     }
 

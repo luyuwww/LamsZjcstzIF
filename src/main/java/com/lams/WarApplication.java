@@ -1,76 +1,83 @@
 package com.lams;
 
+
+
 import com.alibaba.druid.pool.DruidDataSource;
 import com.lams.pojo.SUser;
 import com.lams.util.DruidProperties;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.jasper.tagplugins.jstl.core.Url;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import stub.ExpectedApproval;
-import stub.ExpectedApprovalSoap;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import javax.sql.DataSource;
+import java.sql.SQLException;
 
 /**
  * Created by DaMo on 2015/12/9.
  */
 @Configuration
 @SpringBootApplication
-@EnableConfigurationProperties(DruidProperties.class)
+@EnableConfigurationProperties(com.lams.util.DruidProperties.class)
 @MapperScan("com.lams.dao.mapper")
 public class WarApplication extends SpringBootServletInitializer {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(WarApplication.class);
-    }
     public static void main(String[] args) {
         SpringApplication.run(WarApplication.class, args);
     }
 
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(WarApplication.class);
+    }
+
     @Bean
-    public DruidDataSource druidDataSource(DruidProperties dp){
+    public DataSource druidDataSource(){
         DruidDataSource druidDataSource = new DruidDataSource();
-        druidDataSource.setUsername(dp.getUsername());
-        druidDataSource.setPassword(dp.getPassword());
-        druidDataSource.setUrl(dp.getUrl());
+        druidDataSource.setUsername(druidProperties.getUsername());
+        druidDataSource.setPassword(druidProperties.getPassword());
+        druidDataSource.setUrl(druidProperties.getUrl());
+        try {
+            druidDataSource.setFilters(druidProperties.getFilter());
+        } catch (SQLException e) {
+            logger.error("init druid test sql error!");
+        }
+        druidDataSource.setMaxActive(druidProperties.getMaxActive());
+        druidDataSource.setInitialSize(druidProperties.getInitialSize());
+        druidDataSource.setMinIdle(druidProperties.getMinIdle());
+        druidDataSource.setTimeBetweenEvictionRunsMillis(druidProperties.getTimeBetweenEvictionRunsMillis());
+        druidDataSource.setMinEvictableIdleTimeMillis(druidProperties.getMinEvictableIdleTimeMillis());
+        druidDataSource.setValidationQuery(druidProperties.getValidationQuery());
+        druidDataSource.setTestWhileIdle(druidProperties.getTestWhileIdle());
+        druidDataSource.setTestOnBorrow(druidProperties.getTestOnBorrow());
+        druidDataSource.setTestOnReturn(druidProperties.getTestOnReturn());
         return druidDataSource;
     }
 
     @Bean
-    public SqlSessionFactory sqlSessionFactoryBean(DruidProperties dp) throws Exception {
+    public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(druidDataSource(dp));
+        sqlSessionFactoryBean.setDataSource(druidDataSource());
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mybatis/*.xml"));
         return sqlSessionFactoryBean.getObject();
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(DruidProperties dp) {
-        return new DataSourceTransactionManager(druidDataSource(dp));
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(druidDataSource());
     }
 
-//    @Bean
+    //    @Bean
 //    public ExpectedApprovalSoap expectedApprovalSoap(){
 //        URL url = null;
 //        try {
@@ -87,8 +94,6 @@ public class WarApplication extends SpringBootServletInitializer {
         user.setUsername("sdfsdf2fcsdcw");
         return user;
     }
-
-    @Value("${oa.todo.ws.url}")
-    public String oaTodoWsURL;
-
+    @Autowired
+    protected DruidProperties druidProperties;
 }

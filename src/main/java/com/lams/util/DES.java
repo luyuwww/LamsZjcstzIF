@@ -1,12 +1,15 @@
 package com.lams.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+
 import org.apache.commons.lang3.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -77,6 +80,7 @@ public class DES {
 
 	/**
 	 * Description 根据键值进行加密
+	 *
 	 * @param data 加密byte数组
 	 * @param key 加密键byte数组
 	 * @return
@@ -99,8 +103,10 @@ public class DES {
 
 	/**
 	 * Description 根据键值进行解密
+	 *
 	 * @param data 解密byte数组
 	 * @param key 加密键byte数组
+	 * @return
 	 * @throws Exception
 	 */
 	private static byte[] decrypt(byte[] data, byte[] key) throws Exception {
@@ -116,5 +122,9 @@ public class DES {
 		// 用密钥初始化Cipher对象
 		cipher.init(Cipher.DECRYPT_MODE, securekey, iv);
 		return cipher.doFinal(data);
+	}
+
+	public static void main(String[] args) throws Exception {
+		System.out.println(encrypt("wangjin", "ccccuioa"));
 	}
 }
