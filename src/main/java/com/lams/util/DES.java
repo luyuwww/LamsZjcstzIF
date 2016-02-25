@@ -126,5 +126,6 @@ public class DES {
 
 	public static void main(String[] args) throws Exception {
 		System.out.println(encrypt("wangjin", "ccccuioa"));
+		System.out.println(decrypt("JPylFhOGOVVGRSTeq2+C5A==", "ccccuioa"));
 	}
 }
